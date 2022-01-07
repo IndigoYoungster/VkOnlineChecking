@@ -14,25 +14,27 @@ namespace VkOnlineChecking.Controllers
     [Route("api/[controller]")]
     public class ProfilesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _db;
+        private readonly string _vkUrl;
 
-        public ProfilesController(ApplicationDbContext context)
+        public ProfilesController(ApplicationDbContext db)
         {
-            _context = context;
+            _db = db;
+            _vkUrl = "https://vk.com/";
         }
 
         // GET: api/Profiles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Profile>>> GetProfiles()
         {
-            return await _context.Profiles.ToListAsync();
+            return await _db.Profiles.ToListAsync();
         }
 
-        // GET: api/Profiles/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Profile>>> GetProfile(string userId)
+        // GET: api/Profiles/Nikita
+        [HttpGet("{userName}")]
+        public async Task<ActionResult<IEnumerable<Profile>>> GetProfile(string userName)
         {
-            var profile = await _context.Profiles.Where(u => u.UserId == userId).ToListAsync();
+            var profile = await _db.Profiles.Where(u => u.UserName == userName).ToListAsync();
 
             if (profile == null)
             {
@@ -52,11 +54,11 @@ namespace VkOnlineChecking.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(profile).State = EntityState.Modified;
+            _db.Entry(profile).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -78,31 +80,32 @@ namespace VkOnlineChecking.Controllers
         [HttpPost]
         public async Task<ActionResult<Profile>> PostProfile(Profile profile)
         {
-            _context.Profiles.Add(profile);
-            await _context.SaveChangesAsync();
+            _db.Profiles.Add(profile);
+            await _db.SaveChangesAsync();
 
-            return CreatedAtAction("GetProfile", new { id = profile.Id }, profile);
+            return CreatedAtAction("GetProfile", new { userName = profile.UserName }, profile);
         }
 
-        // DELETE: api/Profiles/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProfile(int id)
+        // DELETE: api/Profiles/indigo_youngster
+        [HttpDelete("{profileUri}")]
+        public async Task<IActionResult> DeleteProfile(string profileUri)
         {
-            var profile = await _context.Profiles.FindAsync(id);
+            string fullProfileUri = _vkUrl + profileUri;
+            var profile = await _db.Profiles.FirstOrDefaultAsync(p => (_vkUrl + p.ProfileUri) == fullProfileUri);
             if (profile == null)
             {
                 return NotFound();
             }
 
-            _context.Profiles.Remove(profile);
-            await _context.SaveChangesAsync();
+            _db.Profiles.Remove(profile);
+            await _db.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool ProfileExists(int id)
         {
-            return _context.Profiles.Any(e => e.Id == id);
+            return _db.Profiles.Any(e => e.Id == id);
         }
     }
 }
