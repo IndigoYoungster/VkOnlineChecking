@@ -12,8 +12,6 @@ namespace VkOnlineChecking.Entities
         public int Id { get; set; }
         [Required]
         public string ProfileUri { get; set; }
-        [Required]
-        public string UserName { get; set; }
 
         public List<ProfileStatistic> ProfileStatistics { get; set; }
     }

@@ -11,9 +11,9 @@ namespace VkOnlineChecking.Entities
         [Key]
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
-        public string ProfileStatus { get; set; }
+        public int ProfileStatus { get; set; }
 
         public int ProfileId { get; set; }
-        public Profile Profile { get; set; }
+        public Profile? Profile { get; set; }
     }
 }

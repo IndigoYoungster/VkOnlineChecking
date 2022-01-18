@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VkOnlineChecking.Data;
@@ -15,12 +14,10 @@ namespace VkOnlineChecking.Controllers
     public class ProfilesController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly string _vkUrl;
 
         public ProfilesController(ApplicationDbContext db)
         {
             _db = db;
-            _vkUrl = "https://vk.com/";
         }
 
         // GET: api/Profiles
@@ -31,10 +28,10 @@ namespace VkOnlineChecking.Controllers
         }
 
         // GET: api/Profiles/Nikita
-        [HttpGet("{userName}")]
-        public async Task<ActionResult<IEnumerable<Profile>>> GetProfile(string userName)
+        [HttpGet("{profileUri}")]
+        public async Task<ActionResult<Profile>> GetProfile(string profileUri)
         {
-            var profile = await _db.Profiles.Where(u => u.UserName == userName).ToListAsync();
+            var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.ProfileUri == profileUri);
 
             if (profile == null)
             {
@@ -44,7 +41,39 @@ namespace VkOnlineChecking.Controllers
             return profile;
         }
 
-        // PUT: api/Profiles/5
+        // POST: api/Profiles
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Profile>> PostProfile(Profile profile)
+        {
+            _db.Profiles.Add(profile);
+            await _db.SaveChangesAsync();
+
+            return CreatedAtAction("GetProfile", new { id = profile.Id }, profile);
+        }
+
+        // DELETE: api/Profiles/indigo_youngster
+        [HttpDelete("{profileUri}")]
+        public async Task<IActionResult> DeleteProfile(string profileUri)
+        {
+            var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.ProfileUri == profileUri);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            _db.Profiles.Remove(profile);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool ProfileExists(int id)
+        {
+            return _db.Profiles.Any(e => e.Id == id);
+        }
+
+        /*        // PUT: api/Profiles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProfile(int id, Profile profile)
@@ -74,38 +103,6 @@ namespace VkOnlineChecking.Controllers
 
             return NoContent();
         }
-
-        // POST: api/Profiles
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Profile>> PostProfile(Profile profile)
-        {
-            _db.Profiles.Add(profile);
-            await _db.SaveChangesAsync();
-
-            return CreatedAtAction("GetProfile", new { userName = profile.UserName }, profile);
-        }
-
-        // DELETE: api/Profiles/indigo_youngster
-        [HttpDelete("{profileUri}")]
-        public async Task<IActionResult> DeleteProfile(string profileUri)
-        {
-            string fullProfileUri = _vkUrl + profileUri;
-            var profile = await _db.Profiles.FirstOrDefaultAsync(p => (_vkUrl + p.ProfileUri) == fullProfileUri);
-            if (profile == null)
-            {
-                return NotFound();
-            }
-
-            _db.Profiles.Remove(profile);
-            await _db.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ProfileExists(int id)
-        {
-            return _db.Profiles.Any(e => e.Id == id);
-        }
+*/
     }
 }

@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VkOnlineChecking.Data;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VkOnlineChecking
 {
@@ -31,7 +33,7 @@ namespace VkOnlineChecking
             string con = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(con));
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VkOnlineChecking", Version = "v1" });
