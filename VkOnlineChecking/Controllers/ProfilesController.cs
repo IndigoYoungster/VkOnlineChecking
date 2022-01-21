@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +29,7 @@ namespace VkOnlineChecking.Controllers
             return responseString.CreateString(profiles);
         }
 
-        // GET: api/Profiles/indigo_youngster
+        // GET: api/Profiles/{profileUri}
         [HttpGet("{profileUri}")]
         public async Task<ActionResult<string>> GetProfile(string profileUri)
         {
@@ -47,7 +44,6 @@ namespace VkOnlineChecking.Controllers
         }
 
         // POST: api/Profiles
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("{profileUri}")]
         public async Task<IActionResult> PostProfile(string profileUri)
         {
@@ -61,7 +57,7 @@ namespace VkOnlineChecking.Controllers
             return Ok();
         }
 
-        // DELETE: api/Profiles/indigo_youngster
+        // DELETE: api/Profiles/{profileUri}
         [HttpDelete("{profileUri}")]
         public async Task<IActionResult> DeleteProfile(string profileUri)
         {
@@ -75,11 +71,6 @@ namespace VkOnlineChecking.Controllers
             await _db.SaveChangesAsync();
 
             return Ok();
-        }
-
-        private bool ProfileExists(int id)
-        {
-            return _db.Profiles.Any(e => e.Id == id);
         }
     }
 }

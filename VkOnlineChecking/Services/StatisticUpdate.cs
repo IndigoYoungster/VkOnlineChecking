@@ -36,17 +36,11 @@ namespace VkOnlineChecking.Services
 
                 profileStatistic = new ProfileStatistic
                 {
-                    //DateTime = DateTime.UtcNow,
                     DateTime = dateTimeNow,
                     ProfileStatus = user.online,
-                    //ProfileId = profileId
                     Profile = profile
                 };
                 _db.ProfileStatistics.Add(profileStatistic);
-
-/*                //Profile profile = _db.Profiles.FirstOrDefault(p => p.Id == profileId);
-                profile.ProfileStatistics.Add(profileStatistic);
-                _db.Profiles.Update(profile);*/
             }
             await _db.SaveChangesAsync();
         }

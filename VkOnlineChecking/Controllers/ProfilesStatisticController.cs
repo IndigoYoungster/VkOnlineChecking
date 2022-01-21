@@ -1,17 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using VkOnlineChecking.Data;
 using VkOnlineChecking.Entities;
-using VkOnlineChecking.Entities.VkJson;
 using VkOnlineChecking.Methods;
-using VkOnlineChecking.Services;
 
 namespace VkOnlineChecking.Controllers
 {
@@ -40,24 +33,25 @@ namespace VkOnlineChecking.Controllers
             return responseString.CreateString(profileStatistics);
         }
 
-        // GET api/ProfilesStatisticController/indigo_youngster
+        // GET api/ProfilesStatisticController/{profileUri}
         [HttpGet("{profileUri}")]
         public async Task<FileResult> GetProfileStatistic(string profileUri)
         {
             var profile = await _db.Profiles.Include(p => p.ProfileStatistics).FirstOrDefaultAsync(p => p.ProfileUri == profileUri);
             if (profile == null)
             {
-                return File(new byte[] { }, fileType, fileName);
+                var tempProfile = new Profile() { Id = 0, ProfileUri = "User not found", ProfileStatistics = null };
+                var tempReport = reportExcel.Generate(tempProfile);
+                return File(tempReport, fileType, fileName);
             }
 
             var report = reportExcel.Generate(profile);
 
             return File(report, fileType, fileName);
-            //return responseString.CreateString(profile);
         }
 
 
-        // DELETE api/<ProfilesStatisticController>/5
+        // DELETE api/ProfilesStatisticController/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

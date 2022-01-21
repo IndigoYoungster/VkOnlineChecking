@@ -13,7 +13,6 @@ namespace VkOnlineChecking.Entities
         public string DateTime { get; set; }
         public int ProfileStatus { get; set; }
 
-        //public int ProfileId { get; set; }
         [Required]
         public virtual Profile Profile { get; set; }
     }

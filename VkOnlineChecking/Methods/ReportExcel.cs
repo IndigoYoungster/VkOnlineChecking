@@ -18,6 +18,11 @@ namespace VkOnlineChecking.Methods
             sheet.Cells["B2"].Value = "Profile:";
             sheet.Cells["C2"].Value = profile.ProfileUri;
 
+            if (profile.ProfileStatistics == null)
+            {
+                return package.GetAsByteArray();
+            }
+
             sheet.Cells["B4"].Value = "DateTime";
             sheet.Cells["C4"].Value = "Status";
 
