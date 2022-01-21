@@ -20,7 +20,7 @@ namespace VkOnlineChecking.Services.QuartzJob
                 //.StartAt(startTime) //use this command to start at the right moment
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(1)
+                    .WithIntervalInMinutes(60)
                     .RepeatForever())
                 .Build();
 
