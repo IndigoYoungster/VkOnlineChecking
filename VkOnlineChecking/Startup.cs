@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using VkOnlineChecking.Data;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using VkOnlineChecking.Services;
+using VkOnlineChecking.Services.QuartzJob;
 
 namespace VkOnlineChecking
 {
@@ -38,9 +40,12 @@ namespace VkOnlineChecking
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VkOnlineChecking", Version = "v1" });
             });
+
+            services.AddTransient<JobFactory>();
+            services.AddScoped<DataJob>();
+            services.AddScoped<IStatisticUpdate, StatisticUpdate>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

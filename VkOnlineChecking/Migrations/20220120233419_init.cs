@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VkOnlineChecking.Migrations
 {
@@ -13,8 +12,7 @@ namespace VkOnlineChecking.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProfileUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProfileUri = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,8 +25,8 @@ namespace VkOnlineChecking.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProfileStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfileStatus = table.Column<int>(type: "int", nullable: false),
                     ProfileId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
