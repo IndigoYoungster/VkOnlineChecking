@@ -43,7 +43,7 @@ namespace VkOnlineChecking.Controllers
             return responseString.CreateString(profile);
         }
 
-        // POST: api/Profiles
+        // POST: api/Profiles/{profileUri}
         [HttpPost("{profileUri}")]
         public async Task<IActionResult> PostProfile(string profileUri)
         {

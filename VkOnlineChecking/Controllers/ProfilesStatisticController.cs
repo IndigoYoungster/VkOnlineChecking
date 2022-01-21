@@ -25,7 +25,7 @@ namespace VkOnlineChecking.Controllers
             reportExcel = new ReportExcel();
         }
 
-        // GET: api/ProfilesStatisticController
+        // GET: api/ProfilesStatistic
         [HttpGet]
         public async Task<ActionResult<string>> GetProfilesStatistic()
         {
@@ -33,7 +33,7 @@ namespace VkOnlineChecking.Controllers
             return responseString.CreateString(profileStatistics);
         }
 
-        // GET api/ProfilesStatisticController/{profileUri}
+        // GET: api/ProfilesStatistic/{profileUri}
         [HttpGet("{profileUri}")]
         public async Task<FileResult> GetProfileStatistic(string profileUri)
         {
@@ -51,7 +51,7 @@ namespace VkOnlineChecking.Controllers
         }
 
 
-        // DELETE api/ProfilesStatisticController/5
+        // DELETE: api/ProfilesStatistic/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
