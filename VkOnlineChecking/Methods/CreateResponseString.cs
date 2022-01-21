@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using VkOnlineChecking.Entities;
 
 namespace VkOnlineChecking.Methods
@@ -25,7 +23,8 @@ namespace VkOnlineChecking.Methods
                 stringBuilder.Append($"Id: {item.Id}\n" +
                           $"Profile URI: {item.ProfileUri}\n\n");
             }
-            return stringBuilder.ToString();
+
+            return stringBuilder.ToString().Trim();
         }
 
         public string CreateString(Profile profile)
@@ -42,7 +41,8 @@ namespace VkOnlineChecking.Methods
                           $"DateTime: {item.DateTime}\n" +
                           $"Online status: {Status[item.ProfileStatus]}\n\n");
             }
-            return stringBuilder.ToString();
+
+            return stringBuilder.ToString().Trim();
         }
     }
 }
