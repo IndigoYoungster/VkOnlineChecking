@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 using VkOnlineChecking.Data;
 using VkOnlineChecking.Entities;
 using VkOnlineChecking.Entities.VkJson;
-
+using VkOnlineChecking.Methods;
+using VkOnlineChecking.Services;
 
 namespace VkOnlineChecking.Controllers
 {
@@ -20,11 +21,15 @@ namespace VkOnlineChecking.Controllers
     {
         private readonly ApplicationDbContext _db;
         private CreateResponseString responseString;
+        private ReportExcel reportExcel;
+        private readonly string fileType = "application/xlsx";
+        private readonly string fileName = "Report.xlsx";
 
         public ProfilesStatisticController(ApplicationDbContext db)
         {
             _db = db;
             responseString = new CreateResponseString();
+            reportExcel = new ReportExcel();
         }
 
         // GET: api/ProfilesStatisticController
@@ -37,25 +42,35 @@ namespace VkOnlineChecking.Controllers
 
         // GET api/ProfilesStatisticController/indigo_youngster
         [HttpGet("{profileUri}")]
-        public async Task<ActionResult<string>> GetProfileStatistic(string profileUri)
+        public async Task<FileResult> GetProfileStatistic(string profileUri)
         {
             var profile = await _db.Profiles.Include(p => p.ProfileStatistics).FirstOrDefaultAsync(p => p.ProfileUri == profileUri);
             if (profile == null)
             {
-                return "Profile not found";
+                return File(new byte[] { }, fileType, fileName);
             }
 
-            return responseString.CreateString(profile);
+            var report = reportExcel.Generate(profile);
+
+            return File(report, fileType, fileName);
+            //return responseString.CreateString(profile);
         }
 
 
         // DELETE api/<ProfilesStatisticController>/5
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var profileStatistic = await _db.ProfileStatistics.FirstOrDefaultAsync(i => i.Id == id);
+            if (profileStatistic == null)
+            {
+                return NotFound();
+            }
+
             _db.ProfileStatistics.Remove(profileStatistic);
             await _db.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

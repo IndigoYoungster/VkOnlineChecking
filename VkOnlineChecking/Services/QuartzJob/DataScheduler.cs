@@ -20,8 +20,8 @@ namespace VkOnlineChecking.Services.QuartzJob
             IJobDetail jobDetail = JobBuilder.Create<DataJob>().Build();
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("updateTrigger", "default")
-                //.StartAt(startTime) //use this command to start at the right moment
-                .StartNow()
+                .StartAt(startTime) //use this command to start at the right moment
+                //.StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInMinutes(1)
                     .RepeatForever())

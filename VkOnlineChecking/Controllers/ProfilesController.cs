@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VkOnlineChecking.Data;
 using VkOnlineChecking.Entities;
+using VkOnlineChecking.Methods;
 
 namespace VkOnlineChecking.Controllers
 {
@@ -31,7 +32,7 @@ namespace VkOnlineChecking.Controllers
             return responseString.CreateString(profiles);
         }
 
-        // GET: api/Profiles/indigo
+        // GET: api/Profiles/indigo_youngster
         [HttpGet("{profileUri}")]
         public async Task<ActionResult<string>> GetProfile(string profileUri)
         {

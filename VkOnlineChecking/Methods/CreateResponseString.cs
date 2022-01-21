@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VkOnlineChecking.Entities;
 
-namespace VkOnlineChecking.Controllers
+namespace VkOnlineChecking.Methods
 {
     public class CreateResponseString
     {
@@ -30,22 +30,8 @@ namespace VkOnlineChecking.Controllers
 
         public string CreateString(Profile profile)
         {
-            if (profile.ProfileStatistics == null)
-            {
-                return $"Id: {profile.Id}\n" +
+            return $"Id: {profile.Id}\n" +
                    $"Profile URI: {profile.ProfileUri}";
-            }
-            else
-            {
-                stringBuilder.Append($"Statistic for {profile.ProfileUri}\n\n");
-                foreach (var item in profile.ProfileStatistics)
-                {
-                    stringBuilder.Append($"DateTime: {item.DateTime}\n" +
-                              $"Online status: {Status[item.ProfileStatus]}\n\n");
-                }
-
-                return stringBuilder.ToString();
-            }
         }
 
         public string CreateString(List<ProfileStatistic> profileStatistics)
